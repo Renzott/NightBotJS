@@ -21,7 +21,7 @@ module.exports = app => {
       (error, response, body) => {
         //var data = JSON.parse(body).data[0].published_at;
 
-        var date = new Date("12/10/19 20:33:00");
+        var date = new Date("12/10/19 12:33:00");
         var now = new Date();
 
         var time = timeDifference(now, date);
