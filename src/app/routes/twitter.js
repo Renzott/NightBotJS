@@ -19,7 +19,7 @@ module.exports = app => {
         headers: header
       },
       (error, response, body) => {
-        var data = JSON.parse(body).data[0].published_at;
+        //var data = JSON.parse(body).data[0].published_at;
 
         var date = new Date("12/10/19 20:33:00");
         var now = new Date();
