@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+
+<body>
+
+<h1 class="text" style="Color: #d3d3b4;"> Cargando...</h1>
+
+</body>
+
+<script>
+
+//var num = 0;
+
+var text = '';
+
+setInterval(ajaxCall, 5000);
+
+
+function ajaxCall(){
+
+$(document).ready(function(){
+
+const Url= 'https://nightbotjs.herokuapp.com/api';
+
+$.ajax({
+
+	url:Url,
+	type:"GET",
+	cache: false,
+	success: function(result){
+
+		//var obj = $.parseJSON(result);
+
+			if(text != result){
+				console.log('Carga');
+
+				//$('.text').text('Keciyo Follow: ' + obj.data.user.fan_num);
+				
+				$('.text').html(result);
+			}
+
+			text = result;
+	},
+	error:function(error){
+		console.log('Error ${error}')
+	}
+
+})
+
+
+})
+
+}
+
+</script>
+
+</html>
