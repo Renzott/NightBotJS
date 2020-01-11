@@ -1,5 +1,1 @@
-module.exports = {
-  start: function() {
-    /* do stuff */
-  }
-};
+console.log("Tiempo!!!");
