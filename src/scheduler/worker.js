@@ -94,7 +94,7 @@ getTwitchData().then(async data => {
     .sort({ _id: -1 })
     .limit(10);
   var lastStream = tasks[0];
-  data = null;
+
   if (data) {
     if (lastStream) {
       console.log(data);
