@@ -1,9 +1,10 @@
 var request = require("request");
+var update = require("../../config/twitter.js");
 
 module.exports = app => {
   app.get("/twitter", (req, res) => {
     var clientID = process.env.API_TW_KEY;
-    var Url = "https://api.twitch.tv/helix/videos?user_id=22484632";
+    var Url = "https://api.twitch.tv/helix/videos?user_id=133161955";
 
     console.log(Url);
 
@@ -19,14 +20,21 @@ module.exports = app => {
         headers: header
       },
       (error, response, body) => {
-        //var data = JSON.parse(body).data[0].published_at;
+        var data = JSON.parse(body).data;
+        var dataSize = Object.keys(data).length;
 
-        var date = new Date("12/10/19 12:33:00");
         var now = new Date();
+        var date = new Date();
 
+        if (dataSize != 0) {
+          date = new Date(data[0].published_at);
+        } else {
+          date = new Date("12/10/19 12:33:00");
+        }
+        console.log(date);
         var time = timeDifference(now, date);
-
         console.log(time);
+
         res.status(200).send(time.toString());
       }
     );
