@@ -1,5 +1,5 @@
 var CronJob = require("cron").CronJob;
-var bot = require("./bot.js");
+var bot = require("./worker.js");
 
 var job = new CronJob({
   cronTime: "0 * * ? * *", // everyday, 9:13, 11:13, 4:13, 8:13,
