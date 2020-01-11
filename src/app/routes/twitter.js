@@ -31,6 +31,7 @@ module.exports = app => {
         } else {
           date = new Date("12/10/19 12:33:00");
         }
+        update(date);
         console.log(date);
         var time = timeDifference(now, date);
         console.log(time);
