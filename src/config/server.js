@@ -7,7 +7,7 @@ require("dotenv").config();
 
 const app = express();
 
-const uriMongo = `mongodb://${process.env.API_MD_KEY}@ds111113.mlab.com:11113/heroku_c97l8n46`;
+const uriMongo = process.env.MONGODB_URI;
 
 mongoose
   .connect(uriMongo, { useNewUrlParser: true, useUnifiedTopology: true })
