@@ -8,20 +8,27 @@ var client = new Twitter({
   access_token_secret: process.env.API_TWIKEY_TKS
 });
 
-console.log(client);
+const update = (message, image) => {
+  client.post("media/upload", { media: image }, (error, media, response) => {
+    if (!error) {
+      console.log(media);
 
-const update = message => {
-  client.post(
-    "statuses/update",
-    { status: message },
-    (error, tweet, response) => {
-      if (!error) {
-        console.log(tweet);
-      } else {
-        console.log(error);
-      }
+      var status = {
+        status: message,
+        media_ids: media.media_id_string
+      };
+
+      client.post("statuses/update", status, function(error, tweet, response) {
+        if (!error) {
+          console.log(tweet);
+        } else {
+          console.log(error);
+        }
+      });
+    } else {
+      console.log(error);
     }
-  );
+  });
 };
 
 module.exports = update;

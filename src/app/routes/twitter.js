@@ -31,30 +31,47 @@ module.exports = app => {
         } else {
           date = new Date("12/10/19 12:33:00");
         }
-        update(date);
         console.log(date);
-        var time = timeDifference(now, date);
+        var time = timeDifference(date, now);
         console.log(time);
 
-        res.status(200).send(time.toString());
+        res.status(200).send("Pagina en Construccion :)");
       }
     );
   });
 };
 
 function timeDifference(date1, date2) {
-  var difference = date1.getTime() - date2.getTime();
-
-  var daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
-  difference -= daysDifference * 1000 * 60 * 60 * 24;
-
-  var hoursDifference = Math.floor(difference / 1000 / 60 / 60);
-  difference -= hoursDifference * 1000 * 60 * 60;
-
-  var minutesDifference = Math.floor(difference / 1000 / 60);
-  difference -= minutesDifference * 1000 * 60;
-
-  //var secondsDifference = Math.floor(difference / 1000);
-
-  return daysDifference;
+  if (date1 > date2) {
+    // swap
+    var result = timeDifference(date2, date1);
+    result.years = -result.years;
+    result.months = -result.months;
+    result.days = -result.days;
+    result.hours = -result.hours;
+    return result;
+  }
+  result = {
+    years: date2.getYear() - date1.getYear(),
+    months: date2.getMonth() - date1.getMonth(),
+    days: date2.getDate() - date1.getDate(),
+    hours: date2.getHours() - date1.getHours()
+  };
+  if (result.hours < 0) {
+    result.days--;
+    result.hours += 24;
+  }
+  if (result.days < 0) {
+    result.months--;
+    // days = days left in date1's month,
+    //   plus days that have passed in date2's month
+    var copy1 = new Date(date1.getTime());
+    copy1.setDate(32);
+    result.days = 32 - date1.getDate() - copy1.getDate() + date2.getDate();
+  }
+  if (result.months < 0) {
+    result.years--;
+    result.months += 12;
+  }
+  return result;
 }
