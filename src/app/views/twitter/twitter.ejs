@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1 style="text-align: center;">Tabla Cutre (tengo sueño)</h1>
+
+    <table style="margin: 0 70px 0 70px; border: 1px solid;">
+      <tbody>
+        <tr>
+          <th>idStream</th>
+          <th>title</th>
+          <th>date</th>
+          <th>thumb</th>
+          <th>duration</th>
+        </tr>
+      </tbody>
+      <tbody>
+        <% for (var c = 0; c < twitch.length; c ++) { %> <% var width = 30; var
+        img = twitch[c].thumb%>
+        <tr>
+          <td><%= twitch[c].idStream%></td>
+          <td style="color: red ;"><%= twitch[c].title%></td>
+          <td><%= twitch[c].date.initDate%></td>
+          <td>
+            <img src=<%= img.replace("%{width}",352).replace("%{height}",240) %>
+            />
+          </td>
+          <td><%= twitch[c].duration%></td>
+        </tr>
+        <%} %>
+      </tbody>
+    </table>
+  </body>
+</html>

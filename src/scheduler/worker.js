@@ -1,7 +1,132 @@
 var update = require("../config/twitter.js");
-
 var image = require("fs").readFileSync("src/scheduler/image.gif");
+var request = require("request");
 
-update("Oh no @renzot_123 \r\n" + new Date(), image);
+const mongoose = require("mongoose");
 
-console.log("Tiempo!!!");
+const uriMongo = process.env.MONGODB_URI;
+
+mongoose
+  .connect(uriMongo, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(db => console.log("db connect..."))
+  .catch(err => console.log(err));
+
+var Task = require("../model/task");
+
+/* ------------ */
+
+const getTwitchData = async () => {
+  var clientID = process.env.API_TW_KEY;
+  var Url = "https://api.twitch.tv/helix/videos?user_id=133161955";
+
+  console.log(Url);
+
+  var header = {
+    Accept: "application/vnd.twitchtv.v5+json",
+    "Client-ID": clientID
+  };
+
+  return new Promise((resolve, reject) => {
+    request(
+      {
+        method: "get",
+        url: Url,
+        headers: header
+      },
+      (error, response, body) => {
+        var data = JSON.parse(body).data;
+        var task = null;
+        if (data) var dataSize = Object.keys(data).length;
+        if (dataSize)
+          task = {
+            idStream: data[0].id,
+            title: data[0].title,
+            date: {
+              initDate: data[0].published_at,
+              updateDate: data[0].published_at
+            },
+            thumb: data[0].thumbnail_url,
+            duration: data[0].duration
+          };
+
+        resolve(task);
+      }
+    );
+  });
+};
+
+function timeDifference(date1, date2) {
+  if (date1 > date2) {
+    var result = timeDifference(date2, date1);
+    result.years = -result.years;
+    result.months = -result.months;
+    result.days = -result.days;
+    result.hours = -result.hours;
+    return result;
+  }
+  result = {
+    years: date2.getYear() - date1.getYear(),
+    months: date2.getMonth() - date1.getMonth(),
+    days: date2.getDate() - date1.getDate(),
+    hours: date2.getHours() - date1.getHours()
+  };
+  if (result.hours < 0) {
+    result.days--;
+    result.hours += 24;
+  }
+  if (result.days < 0) {
+    result.months--;
+    var copy1 = new Date(date1.getTime());
+    copy1.setDate(32);
+    result.days = 32 - date1.getDate() - copy1.getDate() + date2.getDate();
+  }
+  if (result.months < 0) {
+    result.years--;
+    result.months += 12;
+  }
+  return result;
+}
+
+getTwitchData().then(async data => {
+  //var task = new Task(data);
+  //await task.save();
+  var tasks = await Task.find()
+    .sort({ _id: -1 })
+    .limit(10);
+  var lastStream = tasks[0];
+
+  if (data) {
+    if (lastStream) {
+      console.log(data);
+      var actualDate = new Date(data.date.initDate);
+      var lastDate = new Date(lastStream.date.initDate);
+
+      var diff = timeDifference(actualDate, lastDate);
+
+      var timecompact = Object.values(diff).reduce((total, actual) => {
+        return total + actual;
+      });
+      if (timecompact) {
+        var task = new Task(data);
+        await task
+          .save()
+          .then(saveTask => console.log("nuevo task: " + saveTask._id));
+      } else {
+        var dateTemp = new Date();
+        data.date.updateDate = dateTemp.toISOString();
+        await Task.updateOne({ _id: lastStream._id }, data).then(
+          console.log("update task: " + lastStream._id)
+        );
+      }
+    } else {
+      console.log("mongodb vacio");
+      var task = new Task(data);
+      await task
+        .save()
+        .then(saveTask => console.log("nuevo task: " + saveTask._id));
+    }
+  } else {
+    console.log("vacio");
+  }
+  mongoose.connection.close();
+});

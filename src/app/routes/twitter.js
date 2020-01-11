@@ -1,9 +1,16 @@
 var request = require("request");
 var update = require("../../config/twitter.js");
+var Task = require("../../model/task");
 
 module.exports = app => {
-  app.get("/twitter", (req, res) => {
-    var clientID = process.env.API_TW_KEY;
+  app.get("/twitter", async (req, res) => {
+    var tasks = await Task.find();
+
+    res.render("twitter/twitter.ejs", {
+      twitch: tasks
+    });
+
+    /*var clientID = process.env.API_TW_KEY;
     var Url = "https://api.twitch.tv/helix/videos?user_id=133161955";
 
     console.log(Url);
@@ -37,7 +44,7 @@ module.exports = app => {
 
         res.status(200).send("Pagina en Construccion :)");
       }
-    );
+    );*/
   });
 };
 

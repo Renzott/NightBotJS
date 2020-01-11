@@ -25,7 +25,6 @@ module.exports = app => {
         }
       })
       .fail(function(err) {
-        // Something went wrong
         res.redirect("/");
         console.log(err);
       });
