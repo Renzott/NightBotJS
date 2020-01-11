@@ -1,4 +1,5 @@
 var Twitter = require("twitter");
+require("dotenv").config();
 
 var client = new Twitter({
   consumer_key: process.env.API_TWIKEY_COk,
@@ -7,15 +8,20 @@ var client = new Twitter({
   access_token_secret: process.env.API_TWIKEY_TKS
 });
 
+console.log(client);
+
 const update = message => {
-  client
-    .post("statuses/update", { status: message })
-    .then(function(tweet) {
-      console.log(tweet);
-    })
-    .catch(function(error) {
-      throw error;
-    });
+  client.post(
+    "statuses/update",
+    { status: message },
+    (error, tweet, response) => {
+      if (!error) {
+        console.log(tweet);
+      } else {
+        console.log(error);
+      }
+    }
+  );
 };
 
 module.exports = update;
