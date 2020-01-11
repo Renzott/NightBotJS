@@ -94,7 +94,7 @@ getTwitchData().then(async data => {
     .sort({ _id: -1 })
     .limit(10);
   var lastStream = tasks[0];
-
+  data = null;
   if (data) {
     if (lastStream) {
       console.log(data);
@@ -126,7 +126,67 @@ getTwitchData().then(async data => {
         .then(saveTask => console.log("nuevo task: " + saveTask._id));
     }
   } else {
-    console.log("vacio");
+    console.log("Twitch vods Vacio");
+
+    var dateTemp = new Date();
+    lastStream.date.updateDate = dateTemp.toISOString();
+    await Task.updateOne({ _id: lastStream._id }, lastStream).then(
+      console.log("update task: " + lastStream._id)
+    );
   }
+
+  var image = require("fs").readFileSync("src/scheduler/image.gif");
+
+  var twitterDate = () => {
+    var jsonDate = [];
+
+    var localDate = new Date();
+    var lastTaskDate = new Date(lastStream.date.initDate);
+
+    var diff = timeDifference(lastTaskDate, localDate);
+
+    if (diff.years != 0) {
+      if (diff.years == 1) jsonDate.push("un año");
+      jsonDate.push(diff.years + " años");
+    }
+
+    if (diff.months != 0) {
+      if (diff.months == 1) jsonDate.push("un mes");
+      jsonDate.push(diff.months + " meses");
+    }
+
+    if (diff.days != 0) {
+      if (diff.days == 1) jsonDate.push("un dia");
+      jsonDate.push(diff.days + " dias");
+    }
+
+    if (diff.hours != 0) {
+      if (diff.hours == 1) jsonDate.push("una hora");
+      jsonDate.push(diff.hours + " horas");
+    }
+
+    var indexJSON = Object.keys(jsonDate).length;
+
+    if (indexJSON == 1) {
+      return jsonDate.toString();
+    } else {
+      var saveDataJSON = jsonDate[indexJSON - 1];
+      jsonDate[indexJSON - 1] = "y";
+      jsonDate[indexJSON] = saveDataJSON;
+    }
+    return jsonDate.toString().replace(/,/g, " ");
+  };
+
+  var status =
+    "Ultimo Directo: " +
+    twitterDate() +
+    "\r\n\r\nTitulo: " +
+    lastStream.title +
+    "\r\nDuracion: " +
+    lastStream.duration +
+    "\r\n\r\nHaz directo meco :)\r\n\r\n@MrKeciyo";
+
+  update(status, image);
+
   mongoose.connection.close();
 });
