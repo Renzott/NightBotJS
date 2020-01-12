@@ -147,22 +147,22 @@ getTwitchData().then(async data => {
 
     if (diff.years != 0) {
       if (diff.years == 1) jsonDate.push("un año");
-      jsonDate.push(diff.years + " años");
+      else jsonDate.push(diff.years + " años");
     }
 
     if (diff.months != 0) {
       if (diff.months == 1) jsonDate.push("un mes");
-      jsonDate.push(diff.months + " meses");
+      else jsonDate.push(diff.months + " meses");
     }
 
     if (diff.days != 0) {
       if (diff.days == 1) jsonDate.push("un dia");
-      jsonDate.push(diff.days + " dias");
+      else jsonDate.push(diff.days + " dias");
     }
 
     if (diff.hours != 0) {
       if (diff.hours == 1) jsonDate.push("una hora");
-      jsonDate.push(diff.hours + " horas");
+      else jsonDate.push(diff.hours + " horas");
     }
 
     var indexJSON = Object.keys(jsonDate).length;
@@ -179,6 +179,7 @@ getTwitchData().then(async data => {
 
   var status =
     "Ultimo Directo: " +
+    "Hace " +
     twitterDate() +
     "\r\n\r\nTitulo: " +
     lastStream.title +
