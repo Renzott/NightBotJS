@@ -9,6 +9,8 @@
   <body>
     <h1 style="text-align: center;">Tabla Cutre (tengo sueño)</h1>
 
+    <h4 style="text-align: center;" id="diff">Tiempo Null</h4>
+
     <table style="margin: 0 70px 0 70px; border: 1px solid;">
       <tbody>
         <tr>
@@ -36,4 +38,46 @@
       </tbody>
     </table>
   </body>
+  <script>
+    var initDate = "<%- twitch.sort().pop().date.initDate %>";
+
+    function timeDifference(date1, date2) {
+      var difference = date1.getTime() - date2.getTime();
+
+      var daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
+      difference -= daysDifference * 1000 * 60 * 60 * 24;
+
+      var hoursDifference = Math.floor(difference / 1000 / 60 / 60);
+      difference -= hoursDifference * 1000 * 60 * 60;
+
+      var minutesDifference = Math.floor(difference / 1000 / 60);
+      difference -= minutesDifference * 1000 * 60;
+
+      var secondsDifference = Math.floor(difference / 1000);
+
+      return (
+        "Ultimo Directo: \n\n" +
+        daysDifference +
+        " Dia/s " +
+        hoursDifference +
+        " hora/s " +
+        minutesDifference +
+        " minuto/s y " +
+        secondsDifference +
+        " segundo/s "
+      );
+    }
+
+    var dateUpdate = date => {
+      var date2 = new Date(date);
+      var date1 = new Date();
+
+      var differenceDate = timeDifference(date1, date2);
+      document.getElementById("diff").innerHTML = differenceDate;
+    };
+
+    setInterval(() => {
+      dateUpdate(initDate);
+    }, 1000);
+  </script>
 </html>
