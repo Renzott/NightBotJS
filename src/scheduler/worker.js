@@ -117,6 +117,7 @@ getTwitchData().then(async data => {
         await task
           .save()
           .then(saveTask => console.log("nuevo task: " + saveTask._id));
+        //update laststream
         lastStream = data;
       } else {
         var dateTemp = new Date();
