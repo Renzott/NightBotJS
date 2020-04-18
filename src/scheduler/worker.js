@@ -97,20 +97,27 @@ getTwitchData().then(async data => {
 
   if (data) {
     if (lastStream) {
-      console.log(data);
       var actualDate = new Date(data.date.initDate);
       var lastDate = new Date(lastStream.date.initDate);
 
       var diff = timeDifference(actualDate, lastDate);
 
+      console.log("Twitch: " + actualDate);
+      console.log("Mongod: " + lastDate);
+      console.log(diff);
+
       var timecompact = Object.values(diff).reduce((total, actual) => {
         return total + actual;
       });
+
+      console.log(timecompact);
+
       if (timecompact) {
         var task = new Task(data);
         await task
           .save()
           .then(saveTask => console.log("nuevo task: " + saveTask._id));
+        lastStream = data;
       } else {
         var dateTemp = new Date();
         data.date.updateDate = dateTemp.toISOString();
@@ -134,8 +141,6 @@ getTwitchData().then(async data => {
       console.log("update task: " + lastStream._id)
     );
   }
-
-  var image = require("fs").readFileSync("src/scheduler/image.gif");
 
   var twitterDate = () => {
     var jsonDate = [];
