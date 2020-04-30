@@ -9,10 +9,10 @@ const app = express();
 
 const uriMongo = process.env.MONGODB_URI;
 
-/*mongoose
+mongoose
   .connect(uriMongo, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(db => console.log("db connect..."))
-  .catch(err => console.log(err));*/
+  .then((db) => console.log("db connect..."))
+  .catch((err) => console.log(err));
 
 app.set("port", process.env.PORT || 3000);
 app.set("view engine", "ejs");
