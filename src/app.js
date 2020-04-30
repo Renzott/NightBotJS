@@ -10,6 +10,7 @@ require("./app/routes/chatbot")(app);
 require("./app/routes/video")(app);
 require("./app/routes/followage")(app);
 require("./app/routes/twitter")(app);
+require("./app/routes/boda")(app);
 
 app.listen(app.get("port"), () => {
   console.log("server on port", app.get("port"));
