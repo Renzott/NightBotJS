@@ -1,10 +1,10 @@
 var validator = require("validator");
 
-module.exports = app => {
+module.exports = (app) => {
   app.get("/name", (req, res) => {
     var user = req.query.user;
 
-    var sentence = "asdxcv" + user;
+    var sentence = "comando inhabilitado";
 
     console.log("Comando !name usado");
 

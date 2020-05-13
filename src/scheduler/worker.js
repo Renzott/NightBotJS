@@ -4,14 +4,14 @@ var request = require("request");
 
 const mongoose = require("mongoose");
 
+var Task = require("../model/twitch");
+
 const uriMongo = process.env.MONGODB_URI;
 
 mongoose
   .connect(uriMongo, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(db => console.log("db connect..."))
-  .catch(err => console.log(err));
-
-var Task = require("../model/task");
+  .then((db) => console.log("db connect..."))
+  .catch((err) => console.log(err));
 
 /* ------------ */
 
@@ -23,7 +23,7 @@ const getTwitchData = async () => {
 
   var header = {
     Accept: "application/vnd.twitchtv.v5+json",
-    "Client-ID": clientID
+    "Client-ID": clientID,
   };
 
   return new Promise((resolve, reject) => {
@@ -31,7 +31,7 @@ const getTwitchData = async () => {
       {
         method: "get",
         url: Url,
-        headers: header
+        headers: header,
       },
       (error, response, body) => {
         var data = JSON.parse(body).data;
@@ -43,10 +43,10 @@ const getTwitchData = async () => {
             title: data[0].title,
             date: {
               initDate: data[0].published_at,
-              updateDate: data[0].published_at
+              updateDate: data[0].published_at,
             },
             thumb: data[0].thumbnail_url,
-            duration: data[0].duration
+            duration: data[0].duration,
           };
 
         resolve(task);
@@ -68,7 +68,7 @@ function timeDifference(date1, date2) {
     years: date2.getYear() - date1.getYear(),
     months: date2.getMonth() - date1.getMonth(),
     days: date2.getDate() - date1.getDate(),
-    hours: date2.getHours() - date1.getHours()
+    hours: date2.getHours() - date1.getHours(),
   };
   if (result.hours < 0) {
     result.days--;
@@ -87,12 +87,10 @@ function timeDifference(date1, date2) {
   return result;
 }
 
-getTwitchData().then(async data => {
+getTwitchData().then(async (data) => {
   //var task = new Task(data);
   //await task.save();
-  var tasks = await Task.find()
-    .sort({ _id: -1 })
-    .limit(10);
+  var tasks = await Task.find().sort({ _id: -1 }).limit(10);
   var lastStream = tasks[0];
 
   if (data) {
@@ -116,7 +114,7 @@ getTwitchData().then(async data => {
         var task = new Task(data);
         await task
           .save()
-          .then(saveTask => console.log("nuevo task: " + saveTask._id));
+          .then((saveTask) => console.log("nuevo task: " + saveTask._id));
         //update laststream
         lastStream = data;
       } else {
@@ -131,7 +129,7 @@ getTwitchData().then(async data => {
       var task = new Task(data);
       await task
         .save()
-        .then(saveTask => console.log("nuevo task: " + saveTask._id));
+        .then((saveTask) => console.log("nuevo task: " + saveTask._id));
     }
   } else {
     console.log("Twitch vods Vacio");

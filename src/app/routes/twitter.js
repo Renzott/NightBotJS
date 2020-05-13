@@ -1,13 +1,13 @@
 var request = require("request");
 var update = require("../../config/twitter.js");
-var Task = require("../../model/task");
+var Task = require("../../model/twitch");
 
-module.exports = app => {
+module.exports = (app) => {
   app.get("/twitter", async (req, res) => {
     var tasks = await Task.find();
 
     res.render("twitter/twitter.ejs", {
-      twitch: tasks
+      twitch: tasks,
     });
 
     /*var clientID = process.env.API_TW_KEY;
@@ -62,7 +62,7 @@ function timeDifference(date1, date2) {
     years: date2.getYear() - date1.getYear(),
     months: date2.getMonth() - date1.getMonth(),
     days: date2.getDate() - date1.getDate(),
-    hours: date2.getHours() - date1.getHours()
+    hours: date2.getHours() - date1.getHours(),
   };
   if (result.hours < 0) {
     result.days--;
