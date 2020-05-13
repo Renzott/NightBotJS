@@ -21,34 +21,32 @@ module.exports = (app) => {
         }
       }
 
-      if (users.length >= 120) {
-        if (query != undefined) {
-          query = query.split(" ");
-        } else {
-          query = [];
-        }
+      if (query != undefined) {
+        query = query.split(" ");
+      } else {
+        query = [];
+      }
 
-        if (query.length != 0 && query[0] != "") {
-          console.log("------");
-          var data = await Task.find({
-            pareja: {
-              $all: [query[0]],
-            },
+      if (query.length != 0 && query[0] != "") {
+        console.log("------");
+        var data = await Task.find({
+          pareja: {
+            $all: [query[0]],
+          },
+        })
+          .then((e) => {
+            return e;
           })
-            .then((e) => {
-              return e;
-            })
-            .catch(console.log);
+          .catch(console.log);
 
-          if (data.length == 0) {
-            res.send(query + " esta suelt@ en plaza :)");
-          } else {
-            var pareja = data[0].pareja.filter((e) => e != query[0])[0];
-            res.send(
-              "💕💕 " + query[0] + " esta casad@ con " + pareja + " 💕💕"
-            );
-          }
+        if (data.length == 0) {
+          res.send(query + " esta suelt@ en plaza :)");
         } else {
+          var pareja = data[0].pareja.filter((e) => e != query[0])[0];
+          res.send("💕💕 " + query[0] + " esta casad@ con " + pareja + " 💕💕");
+        }
+      } else {
+        if (users.length >= 120) {
           var x = new moment();
           var y = new moment(app.get("moment"));
 
@@ -112,12 +110,13 @@ module.exports = (app) => {
               "💕💕 👰🏻 El comando estara disponible " + interval + " 🤵 💕💕"
             );
           }
+        } else {
+          // 120 viewers
+          res.send(
+            "Debe haber mas de 120 viewers en el directo para que el comando !boda funcione :)"
+          );
         }
-      } else {
-        // 120 viewers
-        res.send(
-          "Debe haber mas de 120 viewers en el directo para que el comando !boda funcione :)"
-        );
+        //
       }
     });
   });
