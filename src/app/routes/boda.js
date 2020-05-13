@@ -31,7 +31,7 @@ module.exports = (app) => {
         console.log("------");
         var data = await Task.find({
           pareja: {
-            $all: [query[0]],
+            $all: [query[0].toLowerCase()],
           },
         })
           .then((e) => {
