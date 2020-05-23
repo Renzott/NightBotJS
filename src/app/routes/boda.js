@@ -42,7 +42,9 @@ module.exports = (app) => {
         if (data.length == 0) {
           res.send(query + " esta suelt@ en plaza :)");
         } else {
-          var pareja = data[0].pareja.filter((e) => e != query[0])[0];
+          var pareja = data[0].pareja.filter(
+            (e) => e != query[0].toLowerCase()
+          )[0];
           res.send("💕💕 " + query[0] + " esta casad@ con " + pareja + " 💕💕");
         }
       } else {
