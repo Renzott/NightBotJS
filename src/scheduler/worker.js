@@ -34,6 +34,7 @@ const getTwitchData = async () => {
         headers: header,
       },
       (error, response, body) => {
+        console.log(response);
         var data = JSON.parse(body).data;
         var task = null;
         if (data) var dataSize = Object.keys(data).length;
@@ -191,7 +192,8 @@ getTwitchData().then(async (data) => {
     lastStream.duration +
     "\r\n\r\nHaz directo meco :)\r\n\r\n@MrKeciyo";
 
-  update(status, image);
+  //update(status, image);
+  console.log(status);
 
   mongoose.connection.close();
 });

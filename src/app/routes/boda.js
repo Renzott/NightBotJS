@@ -50,11 +50,12 @@ module.exports = (app) => {
           var x = new moment();
           var y = new moment(app.get("moment"));
 
-          var diff = moment.duration(x.diff(y)).as("minute");
+          var diff = moment.duration(x.diff(y)).as("seconds");
 
-          if (diff >= app.get("interval")) {
+          //if (diff >= app.get("interval")) {
+          if (true) {
             // Reniciar el moment
-            app.set("moment", moment());
+            //app.set("moment", moment());
 
             // 20 intentos para !boda
             var whileIndex = 0;
@@ -102,7 +103,7 @@ module.exports = (app) => {
           } else {
             var minutesBefore = app.get("interval") - diff;
             var interval = moment
-              .duration(minutesBefore, "minute")
+              .duration(minutesBefore, "seconds")
               .locale("es")
               .humanize(true);
 

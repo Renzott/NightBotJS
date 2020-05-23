@@ -16,8 +16,8 @@ mongoose
   .catch((err) => console.log(err));
 
 // moment - boda
-app.set("moment", moment().subtract(5, "minute"));
-app.set("interval", 5);
+app.set("moment", moment().subtract(2, "seconds"));
+app.set("interval", 2);
 
 // express engine
 app.set("port", process.env.PORT || 3000);
