@@ -48,8 +48,8 @@ module.exports = app => {
             var date = new Date(data);
 
             var time = timeDifference(now, date);
-
-            res.send(time);
+            var text = "Rafowos Boomer 🤣🤣👌👌";
+            res.send(text);
           }
         );
       }
