@@ -49,7 +49,7 @@ module.exports = app => {
 
             var time = timeDifference(now, date);
             var text = "Rafowos Boomer 🤣🤣👌👌";
-            res.send(text);
+            res.send(time);
           }
         );
       }
